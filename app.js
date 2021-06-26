@@ -3,7 +3,8 @@ const express=require('express');
 const db=require('./db/index'); // 数据库
 const Joi=require('joi'); // 表单验证
 const cors=require('cors'); // 跨域
-const userRouter=require('./router/user');  // 路由
+const userRouter=require('./router/user');  // 注册登录路由
+const userInfoRouter=require('./router/userinfo-router'); // 用户个人中心路由模块
 const config=require('./config'); // 全局配置
 const expressJWT=require('express-jwt'); // 基于jsonwebtoken模块的expres中间件
 
@@ -39,6 +40,9 @@ app.use(expressJWT({secret:config.jwtSecretKey,algorithms:['HS256']}).unless({pa
 
 // 注册路由
 app.use('/api',userRouter);
+
+// 注册用户个人中心路由
+app.use('/my',userInfoRouter);
 
 // app.get('/',(req,res)=>{
 //  res.send({

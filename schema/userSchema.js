@@ -9,9 +9,14 @@ const schema={
   password:Joi.string().pattern(/^[\S]{6,12}$/).required(),
   repassword:Joi.ref('password')
  }),
- loginScheme:Joi.object({
+ loginSchema:Joi.object({
   username:Joi.string().alphanum().min(3).max(12).required(),
   password:Joi.string().pattern(/^[\S]{6,12}$/).required(),
+ }),
+ updateUserinfoSchema:Joi.object({
+  id:Joi.number().integer().min(1).required(),
+  nickname:Joi.string().alphanum().min(1).max(12),
+  email:Joi.string().email().required()
  })
 }
 
