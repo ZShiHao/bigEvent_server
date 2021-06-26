@@ -1,0 +1,7 @@
+
+# npm模块文件
+node_modules/
+
+# vscode
+
+.vscode/
