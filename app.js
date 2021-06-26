@@ -1,10 +1,11 @@
 // express框架
 const express=require('express');
-const db=require('./db/index');
-const Joi=require('joi');
-// 跨域
-const cors=require('cors');
-const userRouter=require('./router/user');
+const db=require('./db/index'); // 数据库
+const Joi=require('joi'); // 表单验证
+const cors=require('cors'); // 跨域
+const userRouter=require('./router/user');  // 路由
+const config=require('./config'); // 全局配置
+const expressJWT=require('express-jwt'); // 基于jsonwebtoken模块的expres中间件
 
 const url='http://127.0.0.1'
 const app=express();
@@ -33,8 +34,17 @@ app.use(function(req,res,next){
  next();
 })
 
+// 解析token中间件,unless满足一定条件,则跳过该中间件
+app.use(expressJWT({secret:config.jwtSecretKey,algorithms:['HS256']}).unless({path:[/^\/api\//]}));
+
 // 注册路由
 app.use('/api',userRouter);
+
+// app.get('/',(req,res)=>{
+//  res.send({
+//   user:req.user
+//  })
+// })
 
 // 错误中间件,处理抛出的错误
 app.use(function(err,req,res,next){
@@ -42,10 +52,11 @@ app.use(function(err,req,res,next){
  if(err instanceof Joi.ValidationError) {
   return res.errHandler(err);
  }
+ if(err.name==='UnauthorizedError') return res.errHandler('身份认证失败!');
  // 未知错误
  res.send(err);
 })
 
-app.listen(80,()=>{
+app.listen(config.port,()=>{
  console.log(`api server running at ${url}`);
 })

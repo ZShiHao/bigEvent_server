@@ -9,6 +9,10 @@ const schema={
   password:Joi.string().pattern(/^[\S]{6,12}$/).required(),
   repassword:Joi.ref('password')
  }),
+ loginScheme:Joi.object({
+  username:Joi.string().alphanum().min(3).max(12).required(),
+  password:Joi.string().pattern(/^[\S]{6,12}$/).required(),
+ })
 }
 
 module.exports=schema;

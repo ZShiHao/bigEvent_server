@@ -22,7 +22,6 @@ function validatorMW(schema) {
    throw error
   }else{
    // 验证通过
-   console.log(value);
    next();
   }
  }
@@ -32,6 +31,6 @@ function validatorMW(schema) {
 router.post('/reguser',validatorMW(schema.registerSchema),userHandler.regUserHandler);
 
 // 登录
-router.post('/login',userHandler.loginHandler);
+router.post('/login',validatorMW(schema.loginScheme),userHandler.loginHandler);
 
 module.exports=router;
